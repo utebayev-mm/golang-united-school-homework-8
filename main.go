@@ -17,19 +17,19 @@ type User struct {
 
 func Perform(args Arguments, writer io.Writer) error {
 	if args["operation"] == "" {
-		return fmt.Errorf("operation flag not specified")
+		return fmt.Errorf("-operation flag has to be specified")
 	}
 	if args["fileName"] == "" {
-		return fmt.Errorf("fileName flag not specified")
+		return fmt.Errorf("-fileName flag has to be specified")
 	}
 
 	operation := args["operation"]
 	filename := args["filename"]
-
+	fmt.Println(filename)
 	switch operation {
 	case "add":
 		if args["item"] == "" {
-			return fmt.Errorf("item flag not specified")
+			return fmt.Errorf("-item flag has to be specified")
 		}
 		item := args["item"]
 		fmt.Println(item)
@@ -37,12 +37,12 @@ func Perform(args Arguments, writer io.Writer) error {
 		fmt.Println("list")
 	case "remove":
 		if args["id"] == "" {
-			return fmt.Errorf("id flag not specified")
+			return fmt.Errorf("-id flag has to be specified")
 		}
 		fmt.Println("remove")
 	case "findById":
 		if args["id"] == "" {
-			return fmt.Errorf("id flag not specified")
+			return fmt.Errorf("-id flag has to be specified")
 		}
 		fmt.Println("find")
 	}
