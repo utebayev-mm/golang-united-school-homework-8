@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"io"
 	"os"
 )
@@ -15,6 +16,13 @@ type User struct {
 }
 
 func Perform(args Arguments, writer io.Writer) error {
+	if args["operation"] == "" {
+		return fmt.Errorf("operation flag not specified")
+	}
+	if args["fileName"] == "" {
+		return fmt.Errorf("fileName flag not specified")
+	}
+	fmt.Println(args)
 	return nil
 }
 
@@ -36,6 +44,6 @@ func parseArgs() Arguments {
 		"id":        *idFlag,
 		"item":      *itemFlag,
 		"operation": *operationFlag,
-		"filename":  *filenameFlag,
+		"fileName":  *filenameFlag,
 	}
 }
