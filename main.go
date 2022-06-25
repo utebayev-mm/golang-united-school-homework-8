@@ -24,6 +24,9 @@ func Perform(args Arguments, writer io.Writer) error {
 	}
 
 	operation := args["operation"]
+	if !operationCheck(operation) {
+		return fmt.Errorf("Operation " + operation + " not allowed!")
+	}
 	filename := args["filename"]
 	fmt.Println(filename)
 	switch operation {
