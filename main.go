@@ -22,7 +22,19 @@ func Perform(args Arguments, writer io.Writer) error {
 	if args["fileName"] == "" {
 		return fmt.Errorf("fileName flag not specified")
 	}
-	fmt.Println(args)
+	operation := args["operation"]
+
+	switch operation {
+	case "add":
+		fmt.Println("add")
+	case "list":
+		fmt.Println("list")
+	case "remove":
+		fmt.Println("remove")
+	case "findById":
+		fmt.Println("find")
+	}
+
 	return nil
 }
 
