@@ -1,9 +1,12 @@
 package main
 
 import (
+	"encoding/json"
 	"flag"
 	"fmt"
 	"io"
+	"io/ioutil"
+	"log"
 	"os"
 )
 
@@ -14,6 +17,8 @@ type User struct {
 	Email string `json:"email"`
 	Age   uint   `json:"age"`
 }
+
+var users []User
 
 func Perform(args Arguments, writer io.Writer) error {
 	if args["operation"] == "" {
@@ -27,7 +32,8 @@ func Perform(args Arguments, writer io.Writer) error {
 	if !operationCheck(operation) {
 		return fmt.Errorf("Operation " + operation + " not allowed!")
 	}
-	filename := args["filename"]
+	filename := args["fileName"]
+
 	fmt.Println(filename)
 	switch operation {
 	case "add":
@@ -37,7 +43,20 @@ func Perform(args Arguments, writer io.Writer) error {
 		item := args["item"]
 		fmt.Println(item)
 	case "list":
-		fmt.Println("list")
+		content, err := ioutil.ReadFile(filename)
+		if err != nil {
+			log.Fatal(err)
+		}
+		err = json.Unmarshal(content, &users)
+		if err != nil {
+			log.Fatal(err)
+		}
+		usersToPrint, err := json.Marshal(users)
+		if err != nil {
+			log.Fatal(err)
+		}
+		writer.Write(usersToPrint)
+
 	case "remove":
 		if args["id"] == "" {
 			return fmt.Errorf("-id flag has to be specified")
@@ -64,7 +83,7 @@ func parseArgs() Arguments {
 	idFlag := flag.String("id", "", "")
 	itemFlag := flag.String("item", "", "")
 	operationFlag := flag.String("operation", "", "")
-	filenameFlag := flag.String("filename", "", "")
+	filenameFlag := flag.String("fileName", "", "")
 	flag.Parse()
 
 	return Arguments{
