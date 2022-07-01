@@ -19,7 +19,11 @@ func addNewItem(item, filename string, writer io.Writer) ([]User, error) {
 	if err := json.Unmarshal([]byte(item), &newUser); err != nil {
 		return nil, fmt.Errorf("JSON failed to unmarshal: %w", err)
 	}
-
+	file, err := os.OpenFile(filename, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		return nil, err
+	}
+	defer file.Close()
 	var users []User
 	bytes, err := os.ReadFile(filename)
 	if err != nil {
