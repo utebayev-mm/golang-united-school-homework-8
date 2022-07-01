@@ -61,7 +61,7 @@ func removeUser(id, filename string, writer io.Writer) ([]User, error) {
 		writer.Write([]byte("Item with id " + id + " not found"))
 		return users, nil
 	}
-	return users, nil
+	return newUsers, nil
 }
 
 func findById(id, filename string, writer io.Writer) error {
