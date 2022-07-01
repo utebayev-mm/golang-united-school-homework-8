@@ -34,14 +34,19 @@ func Perform(args Arguments, writer io.Writer) error {
 	}
 	filename := args["fileName"]
 
-	fmt.Println(filename)
 	switch operation {
 	case "add":
 		if args["item"] == "" {
 			return fmt.Errorf("-item flag has to be specified")
 		}
 		item := args["item"]
-		fmt.Println(item)
+
+		users, err := addNewItem(item, filename, writer)
+		if err != nil {
+			log.Fatal(err)
+		}
+		return writeToFile(filename, users)
+
 	case "list":
 		content, err := ioutil.ReadFile(filename)
 		if err != nil {
@@ -61,12 +66,21 @@ func Perform(args Arguments, writer io.Writer) error {
 		if args["id"] == "" {
 			return fmt.Errorf("-id flag has to be specified")
 		}
-		fmt.Println("remove")
+		id := args["id"]
+		users, err := removeUser(id, filename, writer)
+		if err != nil {
+			log.Fatal(err)
+		}
+		return writeToFile(filename, users)
+
 	case "findById":
 		if args["id"] == "" {
 			return fmt.Errorf("-id flag has to be specified")
 		}
-		fmt.Println("find")
+		id := args["id"]
+		if err := findById(id, filename, writer); err != nil {
+			return fmt.Errorf("failed to find by ID %s: %w", filename, err)
+		}
 	}
 
 	return nil
